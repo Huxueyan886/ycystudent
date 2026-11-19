@@ -898,6 +898,24 @@ function renderPlanResult() {
   });
 }
 
+/* ---------- 初始化智能规划页面：渲染表单 + 绑定按钮 ---------- */
+function initPlanner() {
+  renderProfileGrid();
+  renderQuiz();
+
+  const saveProfileBtn = document.getElementById('saveProfile');
+  if (saveProfileBtn) saveProfileBtn.addEventListener('click', saveProfile);
+
+  const saveStatusBtn = document.getElementById('saveStatus');
+  if (saveStatusBtn) saveStatusBtn.addEventListener('click', saveStatus);
+
+  const submitQuizBtn = document.getElementById('submitQuiz');
+  if (submitQuizBtn) submitQuizBtn.addEventListener('click', submitQuiz);
+
+  const generatePlanBtn = document.getElementById('generatePlan');
+  if (generatePlanBtn) generatePlanBtn.addEventListener('click', generatePlan);
+}
+
 /* ================================================================
    9. 高效资料库：内置高频资料 + 手动添加笔记
    ================================================================ */

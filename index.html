@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>辽宁专升本 · 个人学习站</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="countdown-box">
+        <div class="countdown-label">辽宁专升本考试倒计时</div>
+        <div class="countdown-value" id="countdown">考试倒计时：待定</div>
+      </div>
+      <div class="date-set">
+        <label for="examDate">考试日期</label>
+        <input type="date" id="examDate" />
+      </div>
+      <h1 class="app-title">辽宁专升本 · 个人学习站</h1>
+    </div>
+  </header>
+
+  <nav class="app-nav">
+    <a href="#dashboard" class="nav-link active" data-section="dashboard">🏠 首页/看板</a>
+    <a href="#tasks" class="nav-link" data-section="tasks">📋 每日任务</a>
+    <a href="#mistakes" class="nav-link" data-section="mistakes">❌ 错题本</a>
+    <a href="#logs" class="nav-link" data-section="logs">📓 学习日志</a>
+    <a href="#prompts" class="nav-link" data-section="prompts">🤖 AI 提示词</a>
+    <a href="#planner" class="nav-link" data-section="planner">🧠 智能规划</a>
+    <a href="#materials" class="nav-link" data-section="materials">📚 高效资料库</a>
+  </nav>
+
+  <main class="app-main">
+    <!-- 科目看板 -->
+    <section id="dashboard" class="card-section section active">
+      <h2 class="section-title">科目看板</h2>
+      <p class="section-desc">每个科目显示“今日任务数 / 已完成数”</p>
+      <div class="subject-grid" id="subjectGrid"></div>
+    </section>
+
+    <!-- 每日任务 -->
+    <section id="tasks" class="card-section section">
+      <h2 class="section-title">每日任务</h2>
+      <div class="add-form card" id="taskForm">
+        <div class="form-row">
+          <select id="taskSubject" required></select>
+          <input type="text" id="taskContent" placeholder="任务内容，例如：背诵英语单元 3 单词" required />
+        </div>
+        <div class="form-row">
+          <input type="date" id="taskDate" />
+          <button type="submit" class="btn-add">添加任务</button>
+        </div>
+      </div>
+      <div class="filter-chip" id="taskFilters"></div>
+      <ul class="task-list" id="taskList"></ul>
+      <p class="empty-tip" id="taskEmptyTip">暂无任务，添加一条开始吧～</p>
+    </section>
+
+    <!-- 错题本 -->
+    <section id="mistakes" class="card-section section">
+      <h2 class="section-title">错题本</h2>
+      <div class="add-form card" id="mistakeForm">
+        <div class="form-row">
+          <select id="mistakeSubject" required></select>
+          <input type="text" id="mistakeQuestion" placeholder="题目 / 题干" required />
+        </div>
+        <div class="form-row">
+          <textarea id="mistakeMyError" rows="2" placeholder="我的错误（写错在哪了）" required></textarea>
+          <textarea id="mistakeRightIdea" rows="2" placeholder="正确思路 / 解析" required></textarea>
+        </div>
+        <div class="form-row">
+          <input type="date" id="mistakeReviewDate" />
+          <button type="submit" class="btn-add">添加错题</button>
+        </div>
+      </div>
+      <ul class="mistake-list" id="mistakeList"></ul>
+      <p class="empty-tip" id="mistakeEmptyTip">暂无错题记录。</p>
+    </section>
+
+    <!-- 学习日志 -->
+    <section id="logs" class="card-section section">
+      <h2 class="section-title">学习日志</h2>
+      <div class="add-form card" id="logForm">
+        <div class="form-row">
+          <input type="date" id="logDate" />
+          <textarea id="logDone" rows="2" placeholder="今日完成了什么" required></textarea>
+        </div>
+        <div class="form-row">
+          <textarea id="logStuck" rows="2" placeholder="卡点 / 错题（遇到了什么困难）" required></textarea>
+          <textarea id="logNext" rows="2" placeholder="下次起点（明天从哪开始）" required></textarea>
+        </div>
+        <div class="form-row">
+          <button type="submit" class="btn-add">添加日志</button>
+        </div>
+      </div>
+      <ul class="log-list" id="logList"></ul>
+      <p class="empty-tip" id="logEmptyTip">暂无学习日志。</p>
+    </section>
+
+    <!-- AI 提示词 -->
+    <section id="prompts" class="card-section section">
+      <h2 class="section-title">AI 提示词库</h2>
+      <p class="section-desc">点击“复制”把提示词粘贴到 AI 对话框，再把【】里的内容替换成你的实际情况。</p>
+      <div class="prompt-grid" id="promptGrid"></div>
+    </section>
+
+    <!-- 智能规划 -->
+    <section id="planner" class="card-section section">
+      <h2 class="section-title">智能规划</h2>
+      <p class="section-desc">基于你的基础、状态和时间，生成个性化今日学习建议</p>
+
+      <div class="card">
+        <h3>1. 基础设定（各科目当前水平与目标）</h3>
+        <div class="profile-grid" id="profileGrid"></div>
+        <button type="button" class="btn-add" id="saveProfile">保存基础设定</button>
+      </div>
+
+      <div class="card">
+        <h3>2. 每日状态打卡</h3>
+        <div class="form-group">
+          <label class="radio-label"><input type="radio" name="energy" value="high"> 充沛（3分）</label>
+          <label class="radio-label"><input type="radio" name="energy" value="medium"> 一般（2分）</label>
+          <label class="radio-label"><input type="radio" name="energy" value="low"> 疲惫（1分）</label>
+        </div>
+        <div class="form-group">
+          <label class="radio-label"><input type="radio" name="time" value="gt4"> 大于4小时</label>
+          <label class="radio-label"><input type="radio" name="time" value="h2to4"> 2-4小时</label>
+          <label class="radio-label"><input type="radio" name="time" value="h1to2"> 1-2小时</label>
+          <label class="radio-label"><input type="radio" name="time" value="fragment"> 碎片时间</label>
+        </div>
+        <button type="button" class="btn-add" id="saveStatus">保存状态打卡</button>
+      </div>
+
+      <div class="card">
+        <h3>3. 每日小测（5题，正确率低于60%会自动降低推荐难度）</h3>
+        <div id="quizGrid"></div>
+        <button type="button" class="btn-add" id="submitQuiz">提交测试</button>
+        <div id="quizResult" class="quiz-result"></div>
+      </div>
+
+      <div class="card">
+        <h3>4. 生成今日推荐</h3>
+        <button type="button" class="btn-add" id="generatePlan">生成推荐任务</button>
+        <div id="planResult"></div>
+      </div>
+    </section>
+
+    <!-- 高效资料库 -->
+    <section id="materials" class="card-section section">
+      <h2 class="section-title">高效资料库</h2>
+      <p class="section-desc">按科目分类的高频资料，支持折叠展开和一键复制</p>
+
+      <div class="card">
+        <div class="form-row search-row">
+          <input type="search" id="materialsSearch" placeholder="搜索资料（标题/内容关键词）" />
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 12px; color: #111827;">科目分类</h3>
+        <div class="material-subject-tabs" id="materialSubjectTabs">
+          <button class="material-tab active" data-subject="全部">全部</button>
+          <button class="material-tab" data-subject="外语">外语</button>
+          <button class="material-tab" data-subject="计算机">计算机</button>
+          <button class="material-tab" data-subject="高数/思政">高数/思政</button>
+          <button class="material-tab" data-subject="专业综合课">专业综合课</button>
+          <button class="material-tab" data-subject="技能考核">技能考核</button>
+        </div>
+        <div class="material-accordion" id="materialAccordion"></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 12px; color: #111827;">添加我的专属笔记</h3>
+        <div class="add-form card" id="materialAddForm">
+          <div class="form-row">
+            <select id="matSubject" required></select>
+            <input type="text" id="matTitle" placeholder="资料标题" required />
+          </div>
+          <div class="form-row full-row">
+            <textarea id="matContent" rows="3" placeholder="核心内容（支持换行）" required></textarea>
+          </div>
+          <div class="form-row">
+            <button type="submit" class="btn-add">添加笔记</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="material-disclaimer">提示：资料为高频汇总，具体请以辽宁省最新考试大纲为准。</p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <footer class="app-footer">
+    <p>辽宁专升本 · 个人学习站 · 数据仅保存在本地浏览器 localStorage 中，不联网、不上传</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
